@@ -1,8 +1,10 @@
 import init from "./game";
+import Event from "./event";
 
 const optionsSection = document.getElementById('options');
 const playerSection = document.getElementById('players');
-const gameboardSection = document.getElementById('gameboard');
+const mainGameboardSection = document.getElementById('main-gameboard');
+const auxGameboardSection = document.getElementById('aux-gameboard');
 
 const player2Container = document.getElementById('player2-container');
 
@@ -13,13 +15,22 @@ const playOtherButton = document.getElementById('play-other');
 const playComputerButton = document.getElementById('play-computer');
 
 const startButton = document.getElementById('start');
+let isPlayingComputer;
 
-playOtherButton.addEventListener('click', () => showPlayerSection(playOtherButton.id));
-playComputerButton.addEventListener('click', () => showPlayerSection(playComputerButton.id));
+playOtherButton.addEventListener('click', () => {
+  showPlayerSection(playOtherButton.id);
+  isPlayingComputer = false;
+});
+
+playComputerButton.addEventListener('click', () => {
+  showPlayerSection(playComputerButton.id);
+  isPlayingComputer = true;
+});
 
 startButton.addEventListener('click', () => {
   hidePlayerSection();
-  renderGameboard();
+  init(player1Input.value, player2Input.value, isPlayingComputer);
+  renderGameboards();
 });
 
 function showPlayerSection(option) {
@@ -35,19 +46,30 @@ function hidePlayerSection() {
 }
 
 function makeClickable() {
+  Event.emit('attack', [+this.getAttribute('data-row'), +this.getAttribute('data-col')]);
   this.classList.add('hit');
 }
 
-function renderGameboard() {
+function renderGameboards() {
   for(let i = 0; i < 10; i++) {
-    const row = document.createElement('div');
-    row.classList.add('row');
+    const mainRow = document.createElement('div');
+    mainRow.classList.add('row');
+    const auxRow = document.createElement('div');
+    auxRow.classList.add('row');
     for(let j = 0; j < 10; j++) {
-      const cell = document.createElement('div');
-      cell.classList.add('cell');
-      cell.addEventListener('click', makeClickable, { once: true });
-      row.appendChild(cell);
+      const mainCell = document.createElement('div');
+      mainCell.classList.add('cell');
+      mainCell.addEventListener('click', makeClickable, { once: true });
+      mainCell.setAttribute('data-row', i);
+      mainCell.setAttribute('data-col', j);
+      mainRow.appendChild(mainCell);
+      const auxCell = document.createElement('div');
+      auxCell.classList.add('cell');
+      auxCell.setAttribute('data-row', i);
+      auxCell.setAttribute('data-col', j);
+      auxRow.appendChild(auxCell);
     }
-    gameboardSection.appendChild(row);
+    mainGameboardSection.appendChild(mainRow);
+    auxGameboardSection.appendChild(auxRow);
   }
 }
