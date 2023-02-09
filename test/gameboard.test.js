@@ -25,7 +25,7 @@ test('Throw error for invalid coordinate distance', () => {
 test('Throw error for occupied coordinates', () => {
   const gameboard = new Gameboard();
   gameboard.placeShip([0, 0], [0, 3]);
-  expect(() => gameboard.placeShip([0, 0], [0, 3])).toThrow('Cannot place ships over each other');
+  expect(() => gameboard.placeShip([0, 0], [0, 3])).toThrow('Cannot place ships on top of each other');
 })
 
 test('No hits on empty gameboard', () => {

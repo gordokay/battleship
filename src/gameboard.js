@@ -12,19 +12,27 @@ export default class Gameboard {
     let ship;
     //places horizontal ship
     if(start[0] === end[0]) {
-      const ship = new Ship(Math.abs(start[1] - end[1]) + 1);
+      ship = new Ship(Math.abs(start[1] - end[1]) + 1);
       for(let i = Math.min(start[1], end[1]); i <= Math.max(start[1], end[1]); i++) {
         this.shipGrid[this.#convertToIndex(start[0], i)] = ship;
       }
     } 
     //places vertical ship
     else {
-      const ship = new Ship(Math.abs(start[0] - end[0]) + 1);
+      ship = new Ship(Math.abs(start[0] - end[0]) + 1);
       for(let i = Math.min(start[0], end[0]); i <= Math.max(start[0], end[0]); i++) {
         this.shipGrid[this.#convertToIndex(i, start[1])] = ship;
       }
     }
     this.ships.push(ship);
+  }
+
+  receiveAttack(coordinates) {
+    this.#validateCoordinates(coordinates[0], coordinates[1]);
+    const index =  this.#convertToIndex(coordinates[0], coordinates[1]);
+    if(this.hits[index]) return;
+    this.hits[index] = true;
+    if(this.shipGrid[index]) this.shipGrid[index].hit();
   }
 
   isShipAt(coordinates) {
@@ -36,6 +44,13 @@ export default class Gameboard {
   getShipAt(coordinates) {
     this.#validateCoordinates(coordinates[0], coordinates[1]);
     return this.shipGrid[this.#convertToIndex(coordinates[0], coordinates[1])];
+  }
+
+  allSunk() {
+    for(let ship of this.ships) {
+      if(!ship.isSunk()) return false;
+    }
+    return true;
   }
 
   #validateCoordinates(row, col) {
@@ -57,13 +72,13 @@ export default class Gameboard {
     //checks overlap of horizontal ships
     if(start[0] === end[0]) {
       for(let i = Math.min(start[1], end[1]); i <= Math.max(start[1], end[1]); i++) {
-        if(this.isShipAt([start[0], i])) throw new Error('Cannot place ships over each other');
+        if(this.isShipAt([start[0], i])) throw new Error('Cannot place ships on top of each other');
       }
     }
     //checks overlap of vertical ships
     if(start[1] === end[1]) {
       for(let i = Math.min(start[0], end[0]); i <= Math.max(start[0], end[0]); i++) {
-        if(this.isShipAt([i, start[1]])) throw new Error('Cannot place ships over each other');
+        if(this.isShipAt([i, start[1]])) throw new Error('Cannot place ships on top of each other');
       }
     }
   }
