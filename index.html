@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Battleship</title>
+</head>
+<body>
+  <h1>Battleship</h1>
+  <section id="gameboard"></section>
+  <section id="options">
+    <button id="play-other">Play each other</button>
+    <button id="play-computer">Play with computer</button>
+  </section>
+  <section id="players" class="hidden">
+    <form action="">
+      <div class="error"></div>
+      <div id="player1-container">
+        <label for="player1">Player 1</label>
+        <input type="text" name="player1" id="player1">
+      </div>
+      <div id="player2-container">
+        <label for="player2">Player 2</label>
+        <input type="text" name="player2" id="player2">
+      </div>
+      <div>
+        <button type="button" id="start">Start</button>
+      </div>
+    </form>
+  </section>
+  <script src="dist/main.js"></script>
+</body>
+</html>

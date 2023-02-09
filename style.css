@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Trispace:wght@100;500;800&display=swap');
+
+:root {
+  --light-primary: #B9C1DF;
+  --dark-primary: #576BB2;
+  --mid-primary: #8190C5;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Trispace', sans-serif;
+}
+
+button {
+  background-color: transparent;
+  padding: 1em;
+  font-family: inherit;
+  border: 2px solid black;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: var(--light-primary);
+}
+
+#gameboard {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  background-color: var(--light-primary);
+  border: 1px solid var(--dark-primary);
+  border-bottom: none;
+  border-right: none;
+}
+
+.row .cell:last-of-type {
+  border-right: 1px solid var(--dark-primary);
+}
+
+.row:last-of-type .cell {
+  border-bottom: 1px solid var(--dark-primary);
+}
+
+.cell:hover {
+  cursor: pointer;
+  background-color: var(--mid-primary);
+}
+
+.cell.hit {
+  background-color: var(--dark-primary);
+}
+
+.cell.hit:hover {
+  cursor: default;
+}
+
+.hidden {
+  display: none;
+}
