@@ -11,8 +11,16 @@ export default function init(p1 = "Player 1", p2 = "Player 2", isPlayingComputer
 }
 
 function step(player1, player2) {
+  if(player2.gameboard.allSunk()) {
+    console.log(`${player1.name} won`);
+    return;
+  }
   setTimeout(() => {
     player2.attack(player2.getRandomAttack(player1.gameboard), player1.gameboard);
-    Event.emit('change turn', 'player1');
+    if(player1.gameboard.allSunk()) {
+      console.log(`${player1.name} won`);
+      return;
+    }
+    Event.emit('change turn');
   }, 500);
 }

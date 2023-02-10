@@ -81,7 +81,7 @@ function renderGameboards() {
 }
 
 function bindEvents() {
-  Event.subscribe(window, 'change turn', toggleInputEnabled);
+  Event.subscribe(window, 'change turn', enableInput);
   Event.subscribe(window, 'ship placement', renderShips);
   Event.subscribe(window, 'hit', updateCell);
   Event.subscribe(window, 'normal hit', updateAuxCell);
@@ -115,7 +115,6 @@ function updateAuxCell(coordinates) {
   }
 }
 
-function toggleInputEnabled(player) {
-  if(player === 'player1') isInputEnabled = true;
-  else isInputEnabled = false;
+function enableInput() {
+  isInputEnabled = true;
 }
