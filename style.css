@@ -71,6 +71,10 @@ button:hover {
   background-color: var(--dark-primary);
 }
 
+.cell.ship {
+  background: orange;
+}
+
 #main-gameboard .cell.hit:hover {
   cursor: default;
   background-color: var(--dark-primary);

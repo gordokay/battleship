@@ -29,8 +29,9 @@ playComputerButton.addEventListener('click', () => {
 
 startButton.addEventListener('click', () => {
   hidePlayerSection();
-  init(player1Input.value, player2Input.value, isPlayingComputer);
   renderGameboards();
+  init(player1Input.value, player2Input.value, isPlayingComputer);
+  bindEvents();
 });
 
 function showPlayerSection(option) {
@@ -59,7 +60,6 @@ function renderGameboards() {
     for(let j = 0; j < 10; j++) {
       const mainCell = document.createElement('div');
       mainCell.classList.add('cell');
-      mainCell.addEventListener('click', makeClickable, { once: true });
       mainCell.setAttribute('data-row', i);
       mainCell.setAttribute('data-col', j);
       mainRow.appendChild(mainCell);
@@ -72,4 +72,27 @@ function renderGameboards() {
     mainGameboardSection.appendChild(mainRow);
     auxGameboardSection.appendChild(auxRow);
   }
+  Event.subscribe(window, 'ship placement', renderShips);
+  Event.subscribe(window, 'hit', updateCell);
+}
+
+function bindEvents() {
+  const mainCells = document.querySelectorAll('#main-gameboard .cell');
+  mainCells.forEach(cell => cell.addEventListener('click', makeClickable, { once: true }));
+}
+
+function renderShips(ships) {
+  const auxCells = document.querySelectorAll('#aux-gameboard .cell');
+  let i = 0;
+  auxCells.forEach(cell => {
+    if(ships[i]) cell.classList.add('ship');
+    i++;
+  });
+}
+
+function updateCell(coordinates) {
+  const row = coordinates[0];
+  const col = coordinates[1];
+  const cell = document.querySelector(`#main-gameboard [data-row="${row}"][data-col="${col}"]`);
+  cell.classList.add('ship');
 }

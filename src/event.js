@@ -4,7 +4,7 @@ export default class Event {
     const subscriber = {
       sub: obj,
       fn: handler,
-      args: [...args]
+      args: args ? [...args] : []
     }
     if(!Event.events[event]) {
       Event.events[event] = {
