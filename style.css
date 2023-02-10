@@ -75,6 +75,10 @@ button:hover {
   background: orange;
 }
 
+.cell.enemy-hit {
+  background: purple;
+}
+
 #main-gameboard .cell.hit:hover {
   cursor: default;
   background-color: var(--dark-primary);

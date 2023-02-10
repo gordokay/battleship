@@ -28,7 +28,8 @@ export default class Event {
 
   static emit(event, data) {
     for(let subscriber of Event.events[event].subscribers) {
-      subscriber.fn.call(subscriber.obj, data, ...subscriber.args);
+      if(data) subscriber.fn.call(subscriber.obj, data, ...subscriber.args);
+      else subscriber.fn.call(subscriber.obj, ...subscriber.args)
     }
   }
 }

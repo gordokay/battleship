@@ -17,6 +17,8 @@ const playComputerButton = document.getElementById('play-computer');
 const startButton = document.getElementById('start');
 let isPlayingComputer;
 
+let isInputEnabled = false;
+
 playOtherButton.addEventListener('click', () => {
   showPlayerSection(playOtherButton.id);
   isPlayingComputer = false;
@@ -30,8 +32,8 @@ playComputerButton.addEventListener('click', () => {
 startButton.addEventListener('click', () => {
   hidePlayerSection();
   renderGameboards();
-  init(player1Input.value, player2Input.value, isPlayingComputer);
   bindEvents();
+  init(player1Input.value, player2Input.value, isPlayingComputer);
 });
 
 function showPlayerSection(option) {
@@ -47,8 +49,12 @@ function hidePlayerSection() {
 }
 
 function makeClickable() {
-  Event.emit('attack', [+this.getAttribute('data-row'), +this.getAttribute('data-col')]);
-  this.classList.add('hit');
+  if(isInputEnabled) {
+    Event.emit('attack', [+this.getAttribute('data-row'), +this.getAttribute('data-col')]);
+    this.classList.add('hit');
+    isInputEnabled = false;
+    Event.emit('step');
+  }
 }
 
 function renderGameboards() {
@@ -72,11 +78,12 @@ function renderGameboards() {
     mainGameboardSection.appendChild(mainRow);
     auxGameboardSection.appendChild(auxRow);
   }
-  Event.subscribe(window, 'ship placement', renderShips);
-  Event.subscribe(window, 'hit', updateCell);
 }
 
 function bindEvents() {
+  Event.subscribe(window, 'change turn', toggleInputEnabled);
+  Event.subscribe(window, 'ship placement', renderShips);
+  Event.subscribe(window, 'hit', updateCell);
   const mainCells = document.querySelectorAll('#main-gameboard .cell');
   mainCells.forEach(cell => cell.addEventListener('click', makeClickable, { once: true }));
 }
@@ -93,6 +100,12 @@ function renderShips(ships) {
 function updateCell(coordinates) {
   const row = coordinates[0];
   const col = coordinates[1];
-  const cell = document.querySelector(`#main-gameboard [data-row="${row}"][data-col="${col}"]`);
-  cell.classList.add('ship');
+  const cell = document.querySelector(`#${isInputEnabled ? "main" : "aux"}-gameboard [data-row="${row}"][data-col="${col}"]`);
+  if(isInputEnabled)   cell.classList.add('ship');
+  else cell.classList.add('enemy-hit');
+}
+
+function toggleInputEnabled(player) {
+  if(player === 'player1') isInputEnabled = true;
+  else isInputEnabled = false;
 }
