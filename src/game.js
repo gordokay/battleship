@@ -11,6 +11,8 @@ export default function init(p1 = "Player 1", p2 = "Player 2", isPlayingComputer
 }
 
 function step(player1, player2) {
-  player2.attack(player2.getRandomAttack(), player1.gameboard);
-  Event.emit('change turn', 'player1');
+  setTimeout(() => {
+    player2.attack(player2.getRandomAttack(player1.gameboard), player1.gameboard);
+    Event.emit('change turn', 'player1');
+  }, 500);
 }

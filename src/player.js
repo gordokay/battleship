@@ -7,13 +7,16 @@ export default class Player {
     this.gameboard = new Gameboard();
   }
 
-  getRandomAttack() {
-    const row = Math.floor(Math.random() * 10);
-    const col = Math.floor(Math.random() * 10);
+  getRandomAttack(enemyGameboard) {
+    let row, col;
+    do {
+      row = Math.floor(Math.random() * 10);
+      col = Math.floor(Math.random() * 10);
+    } while (enemyGameboard.hits[row * 10 + col]);
     return [row, col];
   }
 
-  attack(coordinates, gameboard) {
-    gameboard.receiveAttack(coordinates);
+  attack(coordinates, enemyGameboard) {
+    enemyGameboard.receiveAttack(coordinates);
   }
 }

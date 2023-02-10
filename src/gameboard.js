@@ -37,7 +37,9 @@ export default class Gameboard {
     if(this.shipGrid[index]) {
       this.shipGrid[index].hit();
       Event.emit('hit', coordinates);
+      return;
     }
+    Event.emit('normal hit', coordinates);
   }
 
   isShipAt(coordinates) {

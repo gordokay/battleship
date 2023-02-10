@@ -84,6 +84,7 @@ function bindEvents() {
   Event.subscribe(window, 'change turn', toggleInputEnabled);
   Event.subscribe(window, 'ship placement', renderShips);
   Event.subscribe(window, 'hit', updateCell);
+  Event.subscribe(window, 'normal hit', updateAuxCell);
   const mainCells = document.querySelectorAll('#main-gameboard .cell');
   mainCells.forEach(cell => cell.addEventListener('click', makeClickable, { once: true }));
 }
@@ -103,6 +104,15 @@ function updateCell(coordinates) {
   const cell = document.querySelector(`#${isInputEnabled ? "main" : "aux"}-gameboard [data-row="${row}"][data-col="${col}"]`);
   if(isInputEnabled)   cell.classList.add('ship');
   else cell.classList.add('enemy-hit');
+}
+
+function updateAuxCell(coordinates) {
+  if(!isInputEnabled) {
+    const row = coordinates[0];
+    const col = coordinates[1];
+    const cell = document.querySelector(`#aux-gameboard [data-row="${row}"][data-col="${col}"`);
+    cell.classList.add('hit');
+  }
 }
 
 function toggleInputEnabled(player) {
