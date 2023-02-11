@@ -16,11 +16,16 @@
 
 body {
   font-family: 'Trispace', sans-serif;
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 main {
+  padding-top: 2rem;
   display: flex;
-  justify-content: space-around;
+  gap: 2rem;
 }
 
 button {
@@ -52,6 +57,11 @@ button:hover {
   border: 1px solid var(--dark-primary);
   border-bottom: none;
   border-right: none;
+}
+
+#aux-gameboard .cell {
+  width: 24px;
+  height: 24px;
 }
 
 .row .cell:last-of-type {

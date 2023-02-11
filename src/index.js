@@ -5,6 +5,7 @@ const optionsSection = document.getElementById('options');
 const playerSection = document.getElementById('players');
 const mainGameboardSection = document.getElementById('main-gameboard');
 const auxGameboardSection = document.getElementById('aux-gameboard');
+const message = document.querySelector('.message');
 
 const player2Container = document.getElementById('player2-container');
 
@@ -85,6 +86,7 @@ function bindEvents() {
   Event.subscribe(window, 'ship placement', renderShips);
   Event.subscribe(window, 'hit', updateCell);
   Event.subscribe(window, 'normal hit', updateAuxCell);
+  Event.subscribe(window, 'win', updateWinMessage);
   const mainCells = document.querySelectorAll('#main-gameboard .cell');
   mainCells.forEach(cell => cell.addEventListener('click', makeClickable, { once: true }));
 }
@@ -96,6 +98,10 @@ function renderShips(ships) {
     if(ships[i]) cell.classList.add('ship');
     i++;
   });
+}
+
+function updateWinMessage(winner) {
+  message.textContent = `${winner} won`;
 }
 
 function updateCell(coordinates) {
