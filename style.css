@@ -1,9 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Trispace:wght@100;500;800&display=swap');
 
 :root {
+  --light: #FAEEFC;
+  --dark: #0F1020;
   --light-primary: #B9C1DF;
   --dark-primary: #576BB2;
   --mid-primary: #8190C5;
+  --light-secondary: #EFC3F5;
+  --mid-secondary: #FA99FF;
 }
 
 *,
@@ -20,6 +24,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: var(--dark);
+  background-color: var(--light);
 }
 
 main {
@@ -32,12 +38,25 @@ button {
   background-color: transparent;
   padding: 1em;
   font-family: inherit;
-  border: 2px solid black;
+  border: 2px solid var(--dark);
+  box-shadow: -4px 4px var(--dark);
+  color: var(--dark);
+}
+
+button:disabled {
+  color: var(--mid-primary);
+  border-color: var(--mid-primary);
+  box-shadow: -4px 4px var(--mid-primary);
+}
+
+button:disabled:hover {
+  cursor: default;
+  background-color: transparent;
 }
 
 button:hover {
   cursor: pointer;
-  background-color: var(--light-primary);
+  background-color: var(--light-secondary);
 }
 
 [id $= "gameboard"] {
@@ -82,16 +101,20 @@ button:hover {
 }
 
 .cell.ship {
-  background: orange;
+  background-color: var(--light-secondary);
 }
 
 .cell.enemy-hit {
-  background: purple;
+  background-color: var(--mid-secondary);
 }
 
 #main-gameboard .cell.hit:hover {
   cursor: default;
   background-color: var(--dark-primary);
+}
+
+#main-gameboard .cell.ship:hover {
+  background-color: var(--light-secondary);
 }
 
 .hidden {

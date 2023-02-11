@@ -6,7 +6,7 @@ export default function init(p1, p2, isPlayingComputer) {
   Event.emit('ship placement', player1.gameboard.shipGrid);
   const player2 = new Player(p2 || "Player 2", isPlayingComputer);
   Event.subscribe(player1, "attack", player1.attack, [player2.gameboard]);
-  Event.emit('change turn', 'player1');
+  Event.emit('change turn');
   Event.subscribe(window, 'step', step, [player1, player2]);
 }
 
