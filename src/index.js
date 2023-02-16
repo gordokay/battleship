@@ -5,6 +5,7 @@ const optionsSection = document.getElementById('options');
 const playerSection = document.getElementById('players');
 const mainGameboardSection = document.getElementById('main-gameboard');
 const auxGameboardSection = document.getElementById('aux-gameboard');
+const boardLabels = document.querySelectorAll('h2');
 const message = document.querySelector('.message');
 
 const player2Container = document.getElementById('player2-container');
@@ -52,7 +53,6 @@ function hidePlayerSection() {
 function makeClickable() {
   if(isInputEnabled) {
     Event.emit('attack', [+this.getAttribute('data-row'), +this.getAttribute('data-col')]);
-    this.classList.add('hit');
     isInputEnabled = false;
     Event.emit('step');
   }
@@ -67,25 +67,28 @@ function renderGameboards() {
     for(let j = 0; j < 10; j++) {
       const mainCell = document.createElement('div');
       mainCell.classList.add('cell');
-      mainCell.setAttribute('data-row', i);
-      mainCell.setAttribute('data-col', j);
+      setCellCoordinates(mainCell, i, j);
       mainRow.appendChild(mainCell);
+
       const auxCell = document.createElement('div');
       auxCell.classList.add('cell');
-      auxCell.setAttribute('data-row', i);
-      auxCell.setAttribute('data-col', j);
+      setCellCoordinates(auxCell, i, j);
       auxRow.appendChild(auxCell);
     }
     mainGameboardSection.appendChild(mainRow);
     auxGameboardSection.appendChild(auxRow);
+    boardLabels.forEach(label => label.classList.remove('hidden'));
   }
 }
 
+function setCellCoordinates(cell, row, col) {
+  cell.setAttribute('data-row', row);
+  cell.setAttribute('data-col', col);
+}
 function bindEvents() {
   Event.subscribe(window, 'change turn', enableInput);
   Event.subscribe(window, 'ship placement', renderShips);
-  Event.subscribe(window, 'hit', updateCell);
-  Event.subscribe(window, 'normal hit', updateAuxCell);
+  Event.subscribe(window, 'attack received', updateCell);
   Event.subscribe(window, 'win', updateWinMessage);
   const mainCells = document.querySelectorAll('#main-gameboard .cell');
   mainCells.forEach(cell => cell.addEventListener('click', makeClickable, { once: true }));
@@ -104,21 +107,13 @@ function updateWinMessage(winner) {
   message.textContent = `${winner} won`;
 }
 
-function updateCell(coordinates) {
+function updateCell(data) {
+  const [ coordinates, isHit ] = data;
   const row = coordinates[0];
   const col = coordinates[1];
   const cell = document.querySelector(`#${isInputEnabled ? "main" : "aux"}-gameboard [data-row="${row}"][data-col="${col}"]`);
-  if(isInputEnabled)   cell.classList.add('ship');
-  else cell.classList.add('enemy-hit');
-}
-
-function updateAuxCell(coordinates) {
-  if(!isInputEnabled) {
-    const row = coordinates[0];
-    const col = coordinates[1];
-    const cell = document.querySelector(`#aux-gameboard [data-row="${row}"][data-col="${col}"`);
-    cell.classList.add('hit');
-  }
+  if(!isHit) cell.classList.add('miss');
+  else cell.classList.add('hit');
 }
 
 function enableInput() {

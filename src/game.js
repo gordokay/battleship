@@ -16,7 +16,7 @@ function step(player1, player2) {
     player2.attack(player2.getRandomAttack(player1.gameboard), player1.gameboard);
     if(checkWin(player2, player1)) return;
     Event.emit('change turn');
-  }, 500);
+  }, 300);
 }
 
 function checkWin(currentPlayer, enemyPlayer) {
